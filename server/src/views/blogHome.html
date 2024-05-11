@@ -1,0 +1,556 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Blog</title>
+    <link rel="icon" type="image/png" href="/public/website/img/fav.png">
+    <link rel="stylesheet" href="/public/website/css/blogHome.css">
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <script src="/public/website/js/tailwindcdn.js"></script>
+
+    <link rel="stylesheet" href="/public/website/css/main.css" />
+    <!-- <script src="/public/website/js/tailwind.js"></script> -->
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="/public/website/js/include.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'heebo': ['Heebo', 'sans-serif'],
+                    },
+                },
+            },
+            plugins: [('@tailwindcss/forms')]
+
+        }
+    </script>
+
+</head>
+
+<body>
+
+    <div class="sticky top-0 z-10" include-html="/src/ssr/templateHeader.html"></div>
+
+    <div id="app" v-cloak>
+        <div v-if="!isLoading"
+            class="bg-[#f7f7f7] flex flex-col px-10 py-20 pb-64 2xl:px-40 xl:px-28 lg:px-20 md:px-16">
+
+            <!-- intro carousel -->
+            <div class="w-full overflow-hidden relative">
+                <div class="carousel-container flex transition-transform duration-700"
+                    :style="{ transform: `translateX(-${currentIndex * 100}%)` }">
+                    <div v-for="item in carBlogs.slice(0,5)" :key="item.id" @click="blogClick(item)"
+                        class="w-full flex-shrink-0 cursor-pointer">
+                        <div class="flex flex-col lg:flex-row justify-between gap-8 lg:gap-24">
+                            <div class="w-full lg:w-1/2" @mouseenter="pauseAutoPlay" @mouseleave="resumeAutoPlay">
+                                <div class=" relative rounded-3xl overflow-hidden">
+                                    <img loading="lazy" :src="fileURL+item.blog_intro.img" class=" w-full "
+                                        alt="item.blog_intro.blog_title">
+                                    <div class="absolute bottom-5 left-5 bg-white px-3 rounded-full">
+                                        <p class="text-sm text-[#2b2e33] font-medium leading-6">{{item.sub_category}}
+                                        </p>
+                                    </div>
+                                    <div class=" absolute bottom-5 right-5 flex gap-3">
+                                        <div v-for="(item, index) in carBlogs.slice(0,5)" class="flex flex-row">
+                                            <button @click="customCarasoul(index)"
+                                                :class="{'bg-green-500': currentIndex % carBlogs.length === index, 'border border-white': currentIndex % carBlogs.length !== index}"
+                                                class="w-2 h-2 shadow-md rounded"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full lg:w-1/2 pr-10 flex flex-col justify-center gap-3 xl:gap-6">
+                                <div class="flex items-center gap-2">
+                                    <img loading="lazy" src="/public/website/img/clock.png" class="w-[18px] h-[18px]"
+                                        alt="">
+                                    <p class="text-[#898E99] text-base font-heebo pb-0 mb-0">{{item.time_to_read}}</p>
+                                </div>
+                                <h1
+                                    class=" xl:text-[26px] 2xl:text-3xl text-xl sm:text-[26px] leading-9 text-[#2b2e33] font-bold font-heebo">
+                                    {{
+                                    item.blog_intro.blog_title }}</h1>
+                                <div>
+                                    <p class="text-[#2b2e33] font-heebo tex-sm lg:text-lg line-clamp-2 lg:line-clamp-3">
+                                        {{item.blog_intro.description[0] && item.blog_intro.description[0].description}}
+                                    </p>
+                                </div>
+                                <div class="flex gap-6">
+                                    <div class="w-12 h-12 overflow-hidden rounded-full">
+
+                                        <div v-if="item.author.photo === 'null' ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                strokeWidth={1.5} stroke="#d1d5db" width="100%" height="100%">
+                                                <path strokeLinecap="round" strokeLinejoin="round"
+                                                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                            </svg>
+                                        </div>
+                                        <div v-else class="w-full h-full">
+                                            <img loading="lazy" class="w-full h-full object-cover"
+                                                :src="item.author.photo === 'null' ? '' : fileURL+item.author.photo "
+                                                alt="">
+                                        </div>
+                                    </div>
+
+                                    <div class="flex flex-col">
+                                        <p class="text-[#222222] font-medium capitalize">
+                                            {{item.author.firstname+' '+item.author.lastname}}
+                                        </p>
+                                        <p id="pubDate" class="text-[#b7bfd0] text-sm ">{{item.pubDate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- intro carousel end -->
+
+            <!-- tabs -->
+            <div id="blogPaginationDisplay" class="w-full pt-20">
+
+                <div v-if="search === true" class="w-full bg-white px-2 py-3 flex justify-between shadow-xl rounded-xl">
+                    <div class="flex justify-center w-full">
+                        <input :onchange="searchBlog"
+                            class="h-8 w-full outline-none border-none focus:border-none focus:ring-0 font-heebo placeholder:text-center text-center"
+                            placeholder="Enter keywords..." type="text" />
+                    </div>
+                    <div class=" flex items-center justify-center w-10">
+                        <img loading="lazy" @click="closeFun()" class="w-5 h-5 cursor-pointer"
+                            src="/public/website/img/close.png" alt="">
+                    </div>
+                </div>
+
+                <div v-else class="w-full bg-white px-2 py-4 shadow-xl rounded-xl">
+                    <!-- <div class="sm:hidden">
+                        <label for="tabs" class="sr-only">Select a tab</label>
+                        <select id="tabs" name="tabs"
+                            class="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-[#18b04c] focus:outline-none focus:ring-[#18b04c] sm:text-sm">
+                            <option v-for="tab in tabs" :key="tab.name" :selected="tab.current">{{ tab.name }}</option>
+                        </select>
+                    </div> -->
+                    <div class=" block">
+                        <div class=" flex justify-between border-gray-200">
+                            <nav class="" aria-label="Tabs">
+                                <a v-for="(tab, tabIdx) in tabs" :key="tab.category" href="javascript:void(0)"
+                                    @click="selectTab(tabIdx)" class="w-fit whitespace-nowrap"
+                                    :class="[tab.current ? 'text-[#2b2e33] font-medium font-heebo' : 'text-[#898e99] hover:text-gray-700', tabIdx === 0 ? 'rounded-l-lg' : '', tabIdx === tabs.length - 1 ? 'rounded-r-lg' : '', 'group relative min-w-0 flex-1 overflow-hidden text-center text-base font-medium px-4 py-4 hover:bg-gray-50 focus:z-10']"
+                                    :aria-current="tab.current ? 'page' : undefined">
+                                    <span>{{ tab.category }}</span>
+                                    <span aria-hidden="true"
+                                        :class="[tab.current ? 'bg-[#18b04c]' : 'bg-transparent', 'absolute inset-x-0 bottom-0 h-0.5']" />
+                                </a>
+                            </nav>
+                            <div class="pr-5">
+                                <img loading="lazy" @click="searchFun()" class="w-5 h-5 cursor-pointer"
+                                    src="/public/website/img/search.webp" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+
+                </div>
+            </div>
+            <!-- tabs end -->
+
+            <!-- filter -->
+            <div class="w-full custom-scrollbar overflow-auto">
+
+                <fieldset class="pt-10 flex flex-wrap sm:justify-center gap-6 sm:gap-10">
+                    <div class="flex  items-center" v-for="(subCat, index) in subCategory" :key="subCat.item">
+                        <input :id="'comments-' + index" :name="'comments-' + index"
+                            aria-describedby="comments-description" v-model="subCat.check" @click="filterBlogs"
+                            name="comments" type="checkbox" class="hidden" />
+                        <label :for="'comments-' + index" class="flex items-center h-6 cursor-pointer">
+                            <div class="w-5 h-5 border-2 border-[#a6aab2]  rounded flex items-center justify-center">
+                                <svg v-show="subCat.check" class="w-4 h-4 text-[#18B04c] font-bold hidden" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div class="ml-3 text-sm leading-6">
+                                <span class="font-medium text-gray-900">{{subCat.item}}</span>
+                            </div>
+                        </label>
+                    </div>
+                </fieldset>
+                <!-- <fieldset v-if="selectTabIndex == 2" class="pt-10 flex flex-wrap sm:justify-center gap-6 sm:gap-10">
+                    <div class="flex  items-center" v-for="(subCat, index) in products">
+                        <input :id="'comments-' + index" :name="'comments-' + index" @click="filterBlogs()"
+                            aria-describedby="comments-description" v-model="subCat.check" name="comments"
+                            type="checkbox" class="hidden" />
+                        <label :for="'comments-' + index" class="flex items-center h-6 cursor-pointer">
+                            <div class="w-5 h-5 border-2 border-[#a6aab2]  rounded flex items-center justify-center">
+                                <svg v-show="subCat.check" class="w-4 h-4 text-[#18B04c] font-bold hidden" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div class="ml-3 text-sm leading-6">
+                                <span class="font-medium text-gray-900">{{subCat.cat}}</span>
+                            </div>
+                        </label>
+                    </div>
+                </fieldset>
+                <fieldset v-if="selectTabIndex == 0" class="pt-16 flex gap-10">
+
+                </fieldset> -->
+            </div>
+            <!-- filter end -->
+
+            <!-- blog -->
+            <div class="mt-16 flex flex-wrap gap-20 justify-between">
+                <ul role="list"
+                    class="grid grid-cols-1 col-span-2 gap-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 w-full">
+                    <div v-if="blogs.length == 0">
+                        <p>No blogs here</p>
+                    </div>
+                    <li else v-for="blog in blogs.slice(0,6)" :key="blog.id" @click="blogClick(blog)"
+                        class="col-span-1 flex flex-col lg:col-span-1 divide-y divide-gray-200 cursor-pointer rounded-xl bg-white h-auto shadow">
+                        <div class="flex flex-1 flex-col p-4 justify-between">
+                            <div>
+                                <div class="relative rounded-xl object-cover overflow-hidden">
+                                    <img loading="lazy" class=" w-full flex-shrink-0 "
+                                        :src="fileURL+blog.blog_intro.img" alt="" />
+                                    <div class="absolute bottom-3 left-3 bg-white px-3 rounded-full">
+                                        <p class="text-xs text-[#2b2e33] font-medium leading-6">{{blog.sub_category}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="mt-5">
+                                    <div class="flex items-center gap-2">
+                                        <img loading="lazy" src="/public/website/img/clock.png"
+                                            class="w-[18px] h-[18px]" alt="">
+                                        <p class="text-[#898E99] text-sm font-heebo pb-0 mb-0">{{blog.time_to_read}}</p>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h2 class=" text-lg text-[#2b2e33] font-bold font-heebo">
+                                            {{ blog.blog_intro.blog_title }}
+                                        </h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-8">
+                                <div class="flex gap-6">
+                                    <div class="w-10 h-10 overflow-hidden rounded-full">
+
+                                        <div v-if="blog.author.photo === 'null' ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                strokeWidth={1.5} stroke="#d1d5db" width="110%" height="110%">
+                                                <path strokeLinecap="round" strokeLinejoin="round"
+                                                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                            </svg>
+                                        </div>
+                                        <div v-else class="w-full h-full">
+                                            <img loading="lazy" class="w-full h-full object-cover"
+                                                :src="blog.author.photo === 'null' ? '' : fileURL+blog.author.photo "
+                                                alt="">
+                                        </div>
+
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <p class="text-[#222222] font-medium capitalize">
+                                            {{blog.author.firstname+' '+blog.author.lastname}}
+                                        </p>
+                                        <p id="pubDate" class="text-[#b7bfd0] text-sm ">{{blog.pubDate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="lg:col-span-1 gap-16 lg:gap-8 grid lg:flex lg:grid-cols-1 ">
+                    <ul role="list"
+                        class="grid sm:grid-cols-2 lg:grid-cols-1 gap-10 lg:w-2/3 bg-white rounded-xl  shadow-md ">
+                        <li v-for="blog in frpBlogs.slice(0,2)" :key="blog.id"
+                            class="col-span-1 flex divide-y divide-gray-200 rounded-xl">
+                            <div class="p-5 gap-8 flex flex-col lg:flex-row">
+                                <div class="relative rounded-xl lg:w-5/12 h-fit object-cover overflow-hidden">
+                                    <img loading="lazy" class=" w-full flex-shrink-0 "
+                                        :src="fileURL+blog.blog_intro.img" alt="" />
+                                    <div class="absolute bottom-3 left-3 bg-white px-3 lg:px-2 rounded-full">
+                                        <p class="text-xs lg:text-[11px] text-[#2b2e33] font-medium leading-6">
+                                            {{blog.sub_category}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="lg:w-7/12">
+                                    <div class="flex items-center gap-2">
+                                        <img loading="lazy" src="/public/website/img/clock.png"
+                                            class="w-[18px] h-[18px]" alt="">
+                                        <p class="text-[#898E99] text-sm font-heebo pb-0 mb-0">{{blog.time_to_read}}
+                                        </p>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h2 class=" text-lg text-[#2b2e33] font-bold font-heebo">
+                                            {{ blog.blog_intro.blog_title }}
+                                        </h2>
+                                    </div>
+                                    <div class="hidden lg:block mt-8">
+                                        <div class="flex gap-6">
+                                            <div class="w-10 h-10 overflow-hidden rounded-full">
+                                                <div v-if="blog.author.photo === 'null' ">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" strokeWidth={1.5} stroke="#d1d5db"
+                                                        width="100%" height="100%">
+                                                        <path strokeLinecap="round" strokeLinejoin="round"
+                                                            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                                    </svg>
+                                                </div>
+                                                <div v-else class="w-full h-full">
+                                                    <img loading="lazy" class="w-full h-full object-cover"
+                                                        :src="blog.author.photo === 'null' ? '' : fileURL+blog.author.photo "
+                                                        alt="">
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col">
+                                                <p class="text-[#222222] font-medium capitalize">
+                                                    {{blog.author.firstname+' '+blog.author.lastname}}
+                                                </p>
+                                                <p id="pubDate" class="text-[#b7bfd0] text-sm mt-1 ">{{blog.pubDate}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </li>
+                    </ul>
+                    <div
+                        class="col-span-1 relative flex items-center flex-col divide-y divide-gray-200 rounded-xl lg:w-1/3 lg:pl-[20px] h-auto ">
+                        <div
+                            class="flex flex-1 flex-col gap-10 p-10 lg:w-full lg:gap-7 lg:p-6 justify-between bg-gradient-to-br from-[#15aa51] to-[#2489f3] shadow-md rounded-xl">
+                            <img loading="lazy" class="w-10" src="/public/website/img/mail.png" alt="mail">
+                            <h3 class="text-3xl text-white font-bold">
+                                Stay up-to-date with TeleCMI
+                            </h3>
+                            <p class="text-base text-white">
+                                Get the latest updates by subscribe to TeleCMI's newsletter
+                            </p>
+                            <input v-model="newsletterEmail"
+                                class="rounded-md p-2 mt-2 bg-transparent text-white placeholder:text-white border border-white focus:ring-0 focus:border-white outline-none"
+                                type="text" placeholder="Enter your work email" />
+                            <button v-if="newsletter === true" type="button"
+                                class="bg-white uppercase py-2 flex justify-center items-center rounded-md font-medium font-heebo"
+                                disabled>
+                                <svg class="animate-spin h-7 w-7 mr-3" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="18" cy="18" r="20" stroke="white" stroke-width="2">
+                                    </circle>
+                                    <path class="opacity-75" fill="red"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                    </path>
+                                </svg>
+                                {{newsletterBtnContent}}
+                            </button>
+                            <button v-if="newsletter === false" :disabled="newsletterEmail == null"
+                                @click="newsletterSubmit"
+                                class="bg-white p-2 rounded-md uppercase font-medium font-heebo">
+                                {{newsletterBtnContent}}
+                            </button>
+
+                            <div v-if="showNewsletterModal"
+                                class="absolute inset-0 bg-opacity-50 pr-6 pl-11 flex justify-center items-center">
+                                <div class="bg-white px-8 py-3 gap-3 flex rounded-lg relative">
+                                    <div class="flex items-center">
+                                        <h3 class="text-lg font-bold text-[#232324]"> {{showNewsletterModalMsg}}</h3>
+                                    </div>
+                                    <button @click="showNewsletterModal = false"
+                                        class="relative -right-5 text-gray-500">
+                                        <span class="text-2xl">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ul role="list" class="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 w-full">
+                    <li v-for="blog in blogs.slice(6,12)" :key="blog.id" @click="blogClick(blog)"
+                        class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-xl cursor-pointer bg-white h-auto shadow">
+                        <div class="flex flex-1 flex-col p-4 justify-between">
+                            <div>
+                                <div class="relative rounded-xl object-cover overflow-hidden">
+                                    <img loading="lazy" class=" w-full flex-shrink-0 "
+                                        :src="fileURL+blog.blog_intro.img" alt="" />
+                                    <div class="absolute bottom-3 left-3 bg-white px-3 rounded-full">
+                                        <p class="text-xs text-[#2b2e33] font-medium leading-6">{{blog.sub_category}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="mt-5">
+                                    <div class="flex items-center gap-2">
+                                        <img loading="lazy" src="/public/website/img/clock.png"
+                                            class="w-[18px] h-[18px]" alt="">
+                                        <p class="text-[#898E99] text-sm font-heebo pb-0 mb-0">{{blog.time_to_read}}
+                                        </p>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h2 class=" text-lg text-[#2b2e33] font-bold font-heebo">
+                                            {{ blog.blog_intro.blog_title }}
+                                        </h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-8">
+                                <div class="flex gap-6">
+                                    <div class="w-10 h-10 overflow-hidden rounded-full">
+                                        <img loading="lazy" class="w-full h-full object-cover"
+                                            :src="fileURL+blog.author.photo" alt="">
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <p class="text-[#222222] font-medium capitalize">
+                                            {{blog.author.firstname+' '+blog.author.lastname}}
+                                        </p>
+                                        <p id="pubDate" class="text-[#b7bfd0] text-sm ">{{blog.pubDate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- blog end -->
+
+            <!-- pagination -->
+            <nav class="flex items-center justify-center px-4 mt-20 gap-3 sm:px-0">
+                <div class=" flex gap-3">
+                    <div v-if="currentPage > 2" @click="firstPage()"
+                        class="border border-[#c4c7cc] cursor-pointer rounded-full p-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                            stroke="#2B2E33" class="sm:w-5 w-3 text-[#2B2E33]">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5" />
+                        </svg>
+                    </div>
+                    <div v-if="currentPage > 1" @click="previousPage()"
+                        class="border border-[#c4c7cc] cursor-pointer rounded-full p-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                            stroke="#2B2E33" class="sm:w-5 w-3 text-[#2B2E33]">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                        </svg>
+                    </div>
+                </div>
+                <div v-if="pages > 5" class="flex items-center gap-3 ">
+                    <div @click="goToPage(1)"
+                        class="border bg-gradient-to-r from-[#18b04c] to-[#288df9]  text-[#2B2E33] font-heebo font-medium cursor-pointer rounded-full w-8 h-8 sm:w-10 sm:h-10 p-[2px] flex justify-center items-center">
+                        <div class="bg-[#f7f7f7] w-full h-full rounded-full flex justify-center items-center">
+                            <p class="text-xs sm:text-sm">1 </p>
+                        </div>
+                    </div>
+                    <div @click="goToPage(2)"
+                        class="border   text-[#2B2E33] border-[#c4c7cc] font-heebo font-medium cursor-pointer rounded-full sm:w-10 sm:h-10 w-8 h-8 p-[2px] flex justify-center items-center">
+                        <div class="bg-[#f7f7f7] w-full h-full rounded-full flex justify-center items-center">
+                            <p>2 </p>
+                        </div>
+                    </div>
+                    <div @click="goToPage(3)"
+                        class="border   text-[#2B2E33] border-[#c4c7cc] font-heebo font-medium cursor-pointer rounded-full sm:w-10 sm:h-10 w-8 h-8 p-[2px] flex justify-center items-center">
+                        <div class="bg-[#f7f7f7] w-full h-full rounded-full flex justify-center items-center">
+                            <p>3 </p>
+                        </div>
+                    </div>
+
+                    <span
+                        class=" inline-flex items-center border-transparent text-center justify-center w-5 text-sm font-medium text-gray-500">.....</span>
+
+                    <div @click="goToPage(pages - 1)"
+                        class="border text-[#2B2E33] border-[#c4c7cc] font-heebo font-medium cursor-pointer rounded-full sm:w-10 sm:h-10 w-8 h-8 p-[2px] flex justify-center items-center">
+                        <div class="bg-[#f7f7f7] w-full h-full rounded-full flex justify-center items-center">
+                            <p>{{pages}} </p>
+                        </div>
+                    </div>
+                </div>
+                <div v-else class="flex items-center gap-3">
+                    <div v-for="n in pages" :key="n" @click="goToPage(n)"
+                        :class="currentPage === n ? 'bg-gradient-to-r from-[#18b04c] to-[#288df9] cursor-default' : 'border-[#c4c7cc] cursor-pointer'"
+                        class="border text-[#2B2E33] font-heebo font-medium  rounded-full sm:w-10 sm:h-10 w-8 h-8 p-[2px] flex justify-center items-center">
+                        <div class="bg-[#f7f7f7] w-full h-full rounded-full flex justify-center items-center">
+                            <p>{{n}} </p>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class=" flex  justify-end gap-3">
+                    <div v-if="pages > 1 && pages !== currentPage" @click="nextPage()"
+                        class="border border-[#c4c7cc] cursor-pointer rounded-full p-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                            stroke="#2B2E33" class="sm:w-5 w-3 text-[#2B2E33]">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </div>
+                    <div v-if="pages > 2" @click="lastPage()"
+                        class="border border-[#c4c7cc] cursor-pointer rounded-full p-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                            stroke="#2B2E33" class="sm:w-5 w-3 text-[#2B2E33]">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </div>
+                </div>
+            </nav>
+            <!-- pagination end -->
+
+            <!-- page loading -->
+
+            <div v-if="pageLoading" class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+                <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+                    <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+
+                        <div
+                            class="relative transform overflow-hidden rounded-lg bg-white  text-left shadow-xl transition-all">
+                            <div>
+                                <div class=" text-center">
+                                    <button type="button"
+                                        class="bg-gradient-to-br from-[#15aa51] to-[#2489f3] text-white px-3 py-2 rounded inline-flex items-center"
+                                        disabled>
+                                        <svg class="animate-spin h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="white"
+                                                stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="white"
+                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                            </path>
+                                        </svg>
+                                        Loading...
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- page loading end -->
+        </div>
+    </div>
+
+
+    <div include-html="http://139.59.18.42:4000/src/ssr/templateFooterhome.html"></div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" src="/src/ssr/blogHomeScript.js"> </script>
+    <script type="module" src="src/ssr/headerScript.js"> </script>
+    <script type="module" src="src/ssr/footerScript.js"> </script>
+
+    <script>
+        includeHTML();
+    </script>
+
+</body>
+
+</html>

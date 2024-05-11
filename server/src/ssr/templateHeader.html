@@ -1,0 +1,498 @@
+<header id="header"
+    class="bg-white sticky top-0 z-20 border-b py-4 lg:py-0 px-10 2xl:px-40 xl:px-28 lg:px-20 md:px-16 border-[#E1E3E5]"
+    v-cloak>
+    <nav class="mx-auto flex gap-10 max-w-7xl items-center justify-between  " aria-label="Global">
+        <div class="flex ">
+            <a href="https://telecmi.com" class="-m-1.5 p-1.5">
+                <span class="sr-only">TeleCMI Logo</span>
+                <img class="h-8 min-w-36 w-36" src="/public/website/img/logo.png" alt="">
+            </a>
+        </div>
+        <div class="flex gap-5 lg:hidden">
+
+            <a href="https://dashboard.telecmi.com/login?action=signup"
+                class="text-xs font-semibold leading-6 text-white py-[6px] px-[10px] rounded bg-gradient-to-br from-[#18b04c] to-[#288df9]">FREE
+                TRIAL </a>
+
+            <button @click="toggleOpenMenuMob" type="button"
+                class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+                <span class="sr-only">Open main menu</span>
+                <svg v-if="openMenuMob === false" class="h-8 w-8 text-[#222222]" fill="none" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor" aria-hidden="false">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+                <svg v-if="openMenuMob === true" class="h-8 w-8 text-[#222222]" fill="none" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="hidden lg:flex lg:gap-x-8">
+            <div class="relative" v-on:mouseleave="notHoverProDropdown">
+                <button v-on:mouseover="hoverProDropdown" type="button"
+                    class="flex items-center py-6 gap-x-1 text-sm font-semibold leading-6 text-gray-900"
+                    aria-expanded="false">
+                    Products
+                    <svg class="h-5 w-5 flex-none text-[#0A461E]" viewBox="0 0 20 20" fill="currentColor"
+                        aria-hidden="false">
+                        <path fill-rule="evenodd"
+                            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <div v-if="proDropdownOpen">
+                    <div :class="proDropdownOpen ? 'absolute' : 'hidden'"
+                        class=" z-10 -ml-36 xl:-ml-40 w-screen transform lg:max-w-4xl">
+                        <div class="overflow-hidden rounded-2xl flex shadow-lg ring-1 ring-black ring-opacity-5">
+                            <div class="relative flex flex-col gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8 lg:grid-cols-2">
+                                <a href="https://www.telecmi.com/solutions/cloud-based-business-phone-system-for-businesses"
+                                    class="-m-3 flex items-start rounded-lg p-3 hover:bg-gray-50">
+                                    <div class="flex h-9 w-9 items-center justify-center rounded-md ">
+                                        <img class="w-full h-full" src="/public/website/img/sales_phone_system.png"
+                                            alt="" />
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="text-sm font-medium text-gray-900">Business Phone System</p>
+                                        <p class="mt-1 text-xs text-gray-500">Smart VoIP-enabled phone system</p>
+                                    </div>
+                                </a>
+                                <a href="https://www.telecmi.com/best-cloud-contact-center-software"
+                                    class="-m-3 flex items-start rounded-lg p-3 hover:bg-gray-50">
+                                    <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md ">
+                                        <img class="w-full h-full" src="/public/website/img/support_phone_system.png"
+                                            alt="" />
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="text-sm font-medium text-gray-900">Cloud Contact Center CX</p>
+                                        <p class="mt-1 text-xs text-gray-500">AI Inbound and outbound contact center</p>
+                                    </div>
+                                </a>
+                                <a href="https://www.telecmi.com/solutions/cloud-telephony"
+                                    class="-m-3 flex items-start rounded-lg p-3 hover:bg-gray-50">
+                                    <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md  ">
+                                        <img class="w-full h-full" src="/public/website/img/virtual_number.png"
+                                            alt="" />
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="text-sm font-medium text-gray-900">Cloud Telephony</p>
+                                        <p class="mt-1 text-xs text-gray-500">Best cloud-based communication system</p>
+                                    </div>
+                                </a>
+                                <a href="https://www.telecmi.com/solutions/best-cloud-pbx-service-for-small-businesses-and-enterprises"
+                                    class="-m-3 flex items-start rounded-lg p-3 hover:bg-gray-50">
+                                    <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md  ">
+                                        <img class="w-full h-full" src="/public/website/img/auto_dialer.png" alt="" />
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="text-sm font-medium text-gray-900">Cloud PBX</p>
+                                        <p class="mt-1 text-xs text-gray-500"> Virtual business communication platform
+                                        </p>
+                                    </div>
+                                </a>
+                                <a href="https://www.telecmi.com/omnichannel-contact-center-software"
+                                    class="-m-3 flex items-start rounded-lg p-3 hover:bg-gray-50">
+                                    <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md  ">
+                                        <img class="w-full h-full" src="/public/website/img/remote_phone_system.png"
+                                            alt="" />
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="text-sm font-medium text-gray-900">Omnichannel Contact Center CX</p>
+                                        <p class="mt-1 text-xs text-gray-500">Streamline customer service operations</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="relative flex flex-col gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8 lg:grid-cols-2">
+                                <a href="https://www.telecmi.com/download"
+                                    class="-m-3 flex items-start rounded-lg p-3 hover:bg-gray-50">
+                                    <div class="flex h-9 w-10 items-center justify-center rounded-md">
+                                        <img class="w-full h-full" src="/public/website/img/desktop_app.png" alt="" />
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="text-sm font-medium text-gray-900">TeleCMI apps</p>
+                                        <p class="mt-1 text-xs text-gray-500">Download TeleCMI mobile & desktop apps</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class=" flex flex-col items-end gap-16 bg-[#fafbfd] w-1/3">
+                                <img class="w-full" src="/public/website/img/product_nav.webp" alt="">
+                                <div class="flex flex-col gap-3 pl-3">
+                                    <p class="text-sm font-medium text-gray-900">Try TeleCMI for Free</p>
+                                    <p class="mt-1 text-sm text-gray-500">
+                                        No upfront fee. Start your 10-day free trial now and see how TeleCMI works.
+                                    </p>
+                                    <a class="text-[#e84c3d] text-sm"
+                                        href="https://dashboard.telecmi.com/login?action=signup">
+                                        Start free trial
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative" v-on:mouseleave="notHoverFeaDropdown">
+                <button v-on:mouseover="hoverFeaDropdown" type="button"
+                    class="flex items-center py-6 gap-x-1 text-sm font-semibold leading-6 text-gray-900"
+                    aria-expanded="false">
+                    Features
+                    <svg class="h-5 w-5 flex-none text-[#0A461E]" viewBox="0 0 20 20" fill="currentColor"
+                        aria-hidden="false">
+                        <path fill-rule="evenodd"
+                            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <div v-if="feaDropdownOpen">
+                    <div :class="feaDropdownOpen ? 'absolute' : 'hidden'"
+                        class=" -left-20 top-full z-10 -mt-0 w-fit  overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-900/5">
+                        <div class="flex">
+                            <div class="p-4 w-full gap-3 flex flex-col">
+                                <a href="https://www.telecmi.com/call-masking"
+                                    class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+                                    <div class="flex h-6 w-6 flex-none items-center justify-center rounded-lg  ">
+                                        <img class="w-full h-full" src="/public/website/img/call_mas.png" alt="" />
+                                    </div>
+                                    <div class="flex-auto">
+                                        <p class="block font-semibold whitespace-nowrap text-gray-900">
+                                            Call Masking
+                                        </p>
+                                    </div>
+                                </a>
+                                <a href="https://www.telecmi.com/business-hours"
+                                    class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+                                    <div
+                                        class="flex h-6 w-6 flex-none items-center justify-center rounded-lg bg-gray-50 ">
+                                        <img class="w-full h-full" src="/public/website/img/bus_hours.png" alt="" />
+                                    </div>
+                                    <div class="flex-auto">
+                                        <p class="block font-semibold whitespace-nowrap text-gray-900">
+                                            Business Hours
+                                        </p>
+                                    </div>
+                                </a>
+                                <a href="https://www.telecmi.com/voicemail"
+                                    class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+                                    <div
+                                        class="flex h-6 w-6 flex-none items-center justify-center rounded-lg bg-gray-50 ">
+                                        <img class="w-full h-full" src="/public/website/img/voice.png" alt="" />
+                                    </div>
+                                    <div class="flex-auto">
+                                        <p class="block font-semibold whitespace-nowrap text-gray-900">
+                                            Voice Mail
+                                        </p>
+                                    </div>
+                                </a>
+                                <a href="https://www.telecmi.com/call-forwarding"
+                                    class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+                                    <div
+                                        class="flex h-6 w-6 flex-none items-center justify-center rounded-lg bg-gray-50 ">
+                                        <img class="w-full h-full" src="/public/website/img/call_for.png" alt="" />
+                                    </div>
+                                    <div class="flex-auto">
+                                        <p class="block font-semibold whitespace-nowrap text-gray-900">
+                                            Call Forwarding
+                                        </p>
+                                    </div>
+                                </a>
+                                <a href="https://www.telecmi.com/call-conferencing"
+                                    class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+                                    <div
+                                        class="flex h-6 w-6 flex-none items-center justify-center rounded-lg bg-gray-50 ">
+                                        <img class="w-full h-full" src="/public/website/img/call_conf.png" alt="" />
+                                    </div>
+                                    <div class="flex-auto">
+                                        <p class="block font-semibold whitespace-nowrap text-gray-900">
+                                            Call Conferencing
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="p-4 w-full flex flex-col gap-3">
+                                <a href="https://www.telecmi.com/international-number"
+                                    class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+                                    <div
+                                        class="flex h-6 w-6 flex-none items-center justify-center rounded-lg bg-gray-50 ">
+                                        <img class="w-full h-full" src="/public/website/img/inter.png" alt="" />
+                                    </div>
+                                    <div class="flex-auto">
+                                        <p class="block font-semibold whitespace-nowrap text-gray-900">
+                                            International Number
+                                        </p>
+                                    </div>
+                                </a>
+                                <a href="https://www.telecmi.com/indian-number"
+                                    class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+                                    <div
+                                        class="flex h-6 w-6 flex-none items-center justify-center rounded-lg bg-gray-50 ">
+                                        <img class="w-full h-full" src="/public/website/img/indian.png" alt="" />
+                                    </div>
+                                    <div class="flex-auto">
+                                        <p class="block font-semibold whitespace-nowrap text-gray-900">
+                                            Indian Number
+                                        </p>
+                                    </div>
+                                </a>
+                                <a href="https://www.telecmi.com/toll-free-number"
+                                    class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+                                    <div
+                                        class="flex h-6 w-6 flex-none items-center justify-center rounded-lg bg-gray-50 ">
+                                        <img class="w-full h-full" src="/public/website/img/tfn.png" alt="" />
+                                    </div>
+                                    <div class="flex-auto">
+                                        <p class="block font-semibold whitespace-nowrap text-gray-900">
+                                            Toll Free Number
+                                        </p>
+                                    </div>
+                                </a>
+                                <a href="https://www.telecmi.com/user-extension"
+                                    class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+                                    <div
+                                        class="flex h-7 w-7 flex-none items-center justify-center rounded-lg bg-gray-50 ">
+                                        <img class="w-full h-full" src="/public/website/img/uxn.png" alt="" />
+                                    </div>
+                                    <div class="flex-auto">
+                                        <p class="block font-semibold whitespace-nowrap text-gray-900">
+                                            User Extension Number
+                                        </p>
+                                    </div>
+                                </a>
+                                <a href="https://www.telecmi.com/virtual-phone-number"
+                                    class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+                                    <div
+                                        class="flex h-6 w-6 flex-none items-center justify-center rounded-lg bg-gray-50 ">
+                                        <img class="w-full h-full" src="/public/website/img/virtual_phone_number.png"
+                                            alt="" />
+                                    </div>
+                                    <div class="flex-auto">
+                                        <p class="block font-semibold whitespace-nowrap text-gray-900">
+                                            Virtual Phone Number
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="flex justify-center pb-5">
+                            <a class="bg-gradient-to-br from-[#18b04c] to-[#288df9] text-white rounded py-2 px-5"
+                                href="https://www.telecmi.com/features">See all
+                                Features</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="https://telecmi.com" class="text-sm py-6 font-semibold leading-6 text-gray-900">Pricing</a>
+
+            <div class="relative" v-on:mouseleave="notHoverResDropdown">
+                <button v-on:mouseover="hoverResDropdown" type="button"
+                    class="flex items-center py-6 gap-x-1 text-sm font-semibold leading-6 text-gray-900"
+                    aria-expanded="false">
+                    Resources
+                    <svg class="h-5 w-5 flex-none text-[#0A461E]" viewBox="0 0 20 20" fill="currentColor"
+                        aria-hidden="false">
+                        <path fill-rule="evenodd"
+                            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <div v-if="resDropdownOpen">
+                    <div :class="resDropdownOpen ? 'absolute' : 'hidden'"
+                        class=" -left-8 top-full z-10 -mt-0 w-fit max-w-md overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-900/5">
+                        <div class="p-4">
+                            <a href="https://www.telecmi.com/resources/coverage"
+                                class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+                                <div
+                                    class="flex h-6 w-6 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                                    <img class="w-full h-full" src="/public/website/img/coverage.png" alt="" />
+                                </div>
+                                <div class="flex-auto">
+                                    <p class="block font-semibold whitespace-nowrap text-gray-900">
+                                        Coverage
+                                    </p>
+                                </div>
+                            </a>
+                            <a href="https://github.com/telecmi"
+                                class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+                                <div
+                                    class="flex h-6 w-6 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                                    <img class="w-full h-full" src="/public/website/img/github.png" alt="" />
+                                </div>
+                                <div class="flex-auto">
+                                    <p class="block font-semibold whitespace-nowrap text-gray-900">
+                                        Github
+                                    </p>
+                                </div>
+                            </a>
+                            <a href="https://doc.telecmi.com/chub/docs/get-started/"
+                                class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+                                <div
+                                    class="flex h-6 w-6 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                                    <img class="w-full h-full" src="/public/website/img/api.png" alt="" />
+                                </div>
+                                <div class="flex-auto">
+                                    <p class="block font-semibold whitespace-nowrap text-gray-900">
+                                        API Documentation
+                                    </p>
+                                </div>
+                            </a>
+                            <a href="https://www.telecmi.com/download"
+                                class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+                                <div
+                                    class="flex h-6 w-6 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                                    <img class="w-full h-full" src="/public/website/img/apps.png" alt="" />
+                                </div>
+                                <div class="flex-auto">
+                                    <p class="block font-semibold whitespace-nowrap text-gray-900">
+                                        Apps
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-8">
+            <div class="flex gap-2">
+                <img class="w-5 h-5" src="/public/website/img/icon.png" alt="">
+                <button class="text-[#2B2E33] whitespace-nowrap cursor-default font-heebo font-medium text-base">
+                    1800 890 3305
+                </button>
+            </div>
+            <a href="https://dashboard.telecmi.com/login?action=signup"
+                class="text-sm whitespace-nowrap font-heebo font-medium text-[#2B2E33]">
+                SIGN IN
+            </a>
+            <a href="#=https://dashboard.telecmi.com/login?action=signup"
+                class="text-sm whitespace-nowrap font-semibold leading-6 text-white py-2 px-3 rounded bg-gradient-to-br from-[#18b04c] to-[#288df9]">FREE
+                TRIAL </a>
+        </div>
+    </nav>
+    <!-- Mobile menu, show/hide based on menu open state. -->
+    <div v-if="openMenuMob" class="lg:hidden">
+
+        <div
+            class="fixed inset-y-0 left-0 z-10 px-10 2xl:px-40 xl:px-28 lg:px-20 md:px-16 w-full overflow-y-auto bg-white top-[68px] py-6 sm:ring-1 sm:ring-gray-900/10 transition-transform duration-300">
+
+            <div class="mt-10 flow-root">
+                <div class=" divide-y divide-gray-500/10">
+                    <div class="-mx-3 space-y-2 py-1">
+                        <button @click="toggleMobProDropdown" type="button"
+                            class="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                            aria-controls="disclosure-1" aria-expanded="false">
+                            Products
+
+                            <svg class="h-5 w-5 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+
+                        <div v-if="mobProDropdownOpen" class="mt-2 space-y-2" id="disclosure-1">
+                            <a href="https://www.telecmi.com/solutions/cloud-based-business-phone-system-for-businesses"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                Business Phone System</a>
+                            <a href="https://www.telecmi.com/best-cloud-contact-center-software"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                Cloud Contact Center CX</a>
+                            <a href="https://www.telecmi.com/solutions/cloud-telephony"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                Cloud Telephony</a>
+                            <a href="https://www.telecmi.com/solutions/best-cloud-pbx-service-for-small-businesses-and-enterprises"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                Cloud PBX</a>
+                            <a href="https://www.telecmi.com/omnichannel-contact-center-software"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                Omnichannel Contact Center CX</a>
+
+                        </div>
+                    </div>
+                    <div class="-mx-3 space-y-2 py-2 border-none">
+                        <button @click="toggleMobFeaDropdown" type="button"
+                            class="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                            aria-controls="disclosure-1" aria-expanded="false">
+                            Features
+
+                            <svg class="h-5 w-5 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+
+                        <div v-if="mobFeaDropdownOpen" class="mt-2 space-y-2" id="disclosure-1">
+                            <a href="https://www.telecmi.com/call-masking"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Call
+                                Masking</a>
+                            <a href="https://www.telecmi.com/business-hours"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                Business Hours</a>
+                            <a href="https://www.telecmi.com/voicemail"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                Voice Mail</a>
+                            <a href="https://www.telecmi.com/call-forwarding"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                Call Forwarding</a>
+                            <a href="https://www.telecmi.com/call-conferencing"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                Call Conferencing</a>
+                            <a href="https://www.telecmi.com/international-number"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                International Number</a>
+                            <a href="https://www.telecmi.com/indian-number"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                Indian Number</a>
+                            <a href="https://www.telecmi.com/toll-free-number"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                Toll Free Number</a>
+                            <a href="https://www.telecmi.com/user-extension"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                User Extension Number</a>
+                            <a href="https://www.telecmi.com/virtual-phone-number"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                Virtual Phone Number</a>
+
+                        </div>
+                    </div>
+
+                    <a href="https://telecmi.com"
+                        class="-mx-3 border-none block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Pricing</a>
+
+                    <div class="-mx-3 space-y-2 py-2 border-none">
+                        <button @click="toggleMobResDropdown" type="button"
+                            class="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                            aria-controls="disclosure-1" aria-expanded="false">
+                            Resources
+
+                            <svg class="h-5 w-5 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+
+                        <div v-if="mobResDropdownOpen" class="mt-2 space-y-2" id="disclosure-1">
+                            <a href="https://www.telecmi.com/resources/coverage"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                Coverage</a>
+                            <a href="https://github.com/telecmi"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                Github</a>
+                            <a href="https://doc.telecmi.com/chub/docs/get-started/"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                API Documentation</a>
+                            <a href="https://www.telecmi.com/download"
+                                class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                Apps</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</header>

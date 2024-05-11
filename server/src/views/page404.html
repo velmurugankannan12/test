@@ -1,0 +1,63 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <title>Blog</title>
+  <link rel="icon" type="image/png" href="/public/website/img/fav.png">
+  <link rel="stylesheet" href="/public/website/css/blogHome.css">
+  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+  <script src="/public/website/js/tailwindcdn.js"></script>
+
+  <link rel="stylesheet" href="/public/website/css/main.css" />
+  <!-- <script src="/public/website/js/tailwind.js"></script> -->
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script src="/public/website/js/include.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'heebo': ['Heebo', 'sans-serif'],
+          },
+        },
+      },
+      plugins: [('@tailwindcss/forms')]
+
+    }
+  </script>
+
+</head>
+
+<body>
+
+  <div class="sticky top-0 z-10" include-html="/src/ssr/templateHeader.html"></div>
+
+  <main
+    class="mx-auto flex w-full max-w-7xl flex-auto flex-col justify-center  px-10 2xl:px-40 xl:px-28 lg:px-20 md:px-16 py-24 mb-40 sm:py-48">
+    <p class="text-base font-semibold leading-8 text-indigo-600">404</p>
+    <h1 class="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">Page not found</h1>
+    <p class="mt-6 text-base leading-7 text-gray-600">Sorry, we couldn’t find the page you’re looking for.</p>
+    <div class="mt-10">
+      <a href="/blog" class="text-sm font-semibold leading-7 text-indigo-600"><span aria-hidden="true">&larr;</span>
+        Back
+        to home</a>
+    </div>
+  </main>
+
+  <div include-html="http://139.59.18.42:4000/src/ssr/templateFooterhome.html"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script type="module" src="src/ssr/headerScript.js"> </script>
+  <script type="module" src="src/ssr/footerScript.js"> </script>
+
+  <script>
+    includeHTML();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+[v-cloak] {
+    display: none;
+}
+
+[v-cloak-footer] {
+    display: none;
+}
+
+
+.carousel-container {
+    transition: transform 0.5s ease-in-out;
+}
+
+input[type="checkbox"]:checked+label>div {
+    border-color: green;
+}
+
+input[type="checkbox"]:checked+label>div>svg {
+    display: block;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 12px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 6px;
+}
+
+
+/* .fade-enter-active, .fade-leave-active {
+    transition: opacity 2s;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+    transition: ease-in-out;
+  }
+   */

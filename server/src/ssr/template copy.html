@@ -1,0 +1,517 @@
+<div v-cloak id="app">
+    <div class="bg-[#f7f7f7] px-10 pt-20 pb-64 2xl:px-40 xl:px-28 lg:px-20 md:px-16">
+        <div class="flex flex-col">
+
+            <!-- step -->
+            <div class="flex ">
+                <div class="flex items-center gap-1">
+                    <a href="/blog" class="text-[#898e99] font-heebo">Blog</a>
+                    <img loading="lazy" class="w-5 h-5" src="/public/website/img/right.png" alt="right-arrow" />
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="text-[#898e99] font-heebo whitespace-nowrap">{{item.sub_category}}</span>
+                    <img loading="lazy" class="w-5 h-5" src="/public/website/img/right.png" alt="right-arrow" />
+                </div>
+                <div class="flex items-center gap-1 w-2/4 sm:w-3/4 lg:w-fit">
+                    <span
+                        class="text-[#2b2e33] font-heebo whitespace-nowrap text-ellipsis overflow-hidden w-3/4 lg:w-full">{{
+                        item.blog_intro.blog_title}}</span>
+                </div>
+            </div>
+            <!-- step end -->
+
+            <!-- blog intro  -->
+            <div class="flex flex-wrap">
+                <div class="w-full lg:w-4/6 lg:pr-40">
+                    <h1 id="introduction" class="text-4xl pt-20 text-[#2b2e33] font-heebo leading-tight font-bold">
+                        {{item.blog_intro.blog_title}}
+                    </h1>
+                </div>
+                <div class="w-full lg:w-2/6 lg:pl-20 flex flex-col gap-3 justify-center">
+                    <div class="flex gap-2 pt-10 lg:pt-20">
+                        <img loading="lazy" class="w-4 h-4" src="/public/website/img/clock.png" alt="clock" />
+                        <p class="text-[#898e99] text-sm">{{item.time_to_read}}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <img loading="lazy" class="w-4 h-4" src="/public/website/img/calendar.png" alt="calendar" />
+                        <p class="text-[#898e99] text-sm">Posted on {{pubDate}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap mt-16">
+                <div class="w-full lg:w-4/6 h-full rounded-3xl overflow-hidden">
+                    <img loading="lazy" :src="fileURL+item.blog_intro.img" alt="" />
+                </div>
+                <div class="w-full lg:w-2/6 lg:pl-20 pt-10 flex lg:flex-col lg:justify-end justify-between gap-10">
+                    <div class="lg:hidden flex bg-white shadow-md w-fit h-fit pl-3 pr-10 py-2 gap-4 rounded-xl">
+                        <div class="w-9 h-9 rounded-full overflow-hidden">
+                            <div v-if="item.author.photo === 'null'">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    strokeWidth={1.5} stroke="#d1d5db" width="100%" height="100%">
+                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                        d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+                            </div>
+                            <div v-else class="w-full h-full">
+                                <img loading="lazy" class="w-full h-full object-cover"
+                                    :src="item.author.photo === 'null' ? '' : fileURL+item.author.photo " alt="">
+                            </div>
+                        </div>
+                        <div class="flex flex-col lg:gap-1">
+                            <p class="text-[#222222] text-sm lg:text-base font-medium font-heebo">
+                                {{item.author.firstname + ' '
+                                + item.author.lastname}}</p>
+                            <p class="text-[#898e99] text-xs lg:text-sm font-heebo">{{ item.author.role}}
+                            </p>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white shadow-md w-fit h-fit py-4 px-5 gap-6 rounded-lg flex lg:flex-col justify-evenly items-center">
+                        <a target="_blank" :href="`https://twitter.com/intent/tweet?url=${item.url_slug}`">
+                            <img loading="lazy" class="w-5 h-5 lg:w-[18px] lg:h-[18px]  cursor-pointer"
+                                src="/public/website/img/twit.png" alt="x">
+                        </a>
+                        <a target="_blank"
+                            :href="`https://www.linkedin.com/sharing/share-offsite/?url=${item.url_slug}`">
+                            <img loading="lazy" class="w-5 h-5 lg:w-[18px] lg:h-[18px] cursor-pointer"
+                                src="/public/website/img/linked.png" alt="linkedin">
+                        </a>
+                        <a target="_blank" :href="`https://www.facebook.com/sharer/sharer.php?u=${item.url_slug}`">
+                            <img loading="lazy" class="w-5 h-5 lg:w-[18px] lg:h-[18px] cursor-pointer"
+                                src="/public/website/img/fac.png" alt="facebook">
+                        </a>
+                    </div>
+                    <div
+                        class="hidden lg:flex bg-white shadow-md w-40 h-40 flex-col items-center justify-center gap-3 rounded-2xl">
+                        <div class="w-12 h-12 rounded-full overflow-hidden">
+                            <div v-if="item.author.photo === 'null'">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    strokeWidth={1.5} stroke="#d1d5db" width="100%" height="100%">
+                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                        d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+                            </div>
+                            <div v-else class="w-full h-full">
+                                <img loading="lazy" class="w-full h-full object-cover"
+                                    :src="item.author.photo === 'null' ? '' : fileURL+item.author.photo " alt="">
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center gap-1">
+                            <p class="text-[#222222] text-base whitespace-nowrap font-medium font-heebo">
+                                {{ item.author.firstname + ' '
+                                + item.author.lastname}}</p>
+                            <p class="text-[#898e99] text-sm font-heebo">{{ item.author.role}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- blog intro end -->
+
+            <!-- blog main & toc -->
+            <div class="flex gap-10 mt-20 h-full">
+                <div class="w-1/4 hidden lg:flex flex-col gap-10 xl:pr-8 h-full pb-16 lg:sticky lg:top-8 ">
+                    <div
+                        class="bg-white shadow-lg lg:pl-4 lg:pr-2 xl:pl-10 xl:pr-8 pt-10 w-full h-auto max-h-80 overflow-auto custom-scrollbar pb-5 rounded-2xl">
+                        <p @click="scrollToSection('introduction')"
+                            class="text-[#898e99] cursor-pointer font-medium font-heebo text-base">Introduction</p>
+                        <div v-if=" toc.length > 0">
+                            <div v-for="(e, index) in  toc" class="flex flex-col py-2">
+                                <p :class="{ active: isActiveSection(e) }" @click="scrollToSection(e)" key={index}
+                                    class='text-[#898e99] cursor-pointer font-medium font-heebo text-base'>
+                                    {{e}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="w-full py-10 flex flex-col gap-4 justify-evenly lg:p-4 xl:p-10 shadow-lg rounded-2xl bg-gradient-to-br from-[#15aa51] to-[#2489f3]">
+                        <div>
+                            <p class="text-[#f7f7f7] text-sm font-heebo"> Make your <br> business call now </p>
+                        </div>
+                        <div>
+                            <p class="text-white text-2xl leading-tight font-bold font-heebo">
+                                Get started with our free trial
+                            </p>
+                        </div>
+
+                        <a href="https://dashboard.telecmi.com/login?action=signup"
+                            class="bg-white py-3 px-5 flex w-fit justify-center rounded text-center uppercase text-sm text-[#2b2e33] whitespace-nowrap outline-none font-bold font-heebo">Book
+                            a
+                            free
+                            demo</a>
+
+                    </div>
+                </div>
+
+                <div class="w-full lg:w-3/4 h-full flex flex-col gap-4">
+                    <div v-for="blog_intro_des in item.blog_intro.description" class="pr-12">
+                        <p class="text-[#2b2e33] font-heebo text-base leading-7" v-html="blog_intro_des.description">
+                        </p>
+                    </div>
+
+                    <div class="" v-for="blog_main in item.blog_data">
+
+                        <!-- section -->
+                        <div v-if="blog_main.type === 'section'" class="flex flex-col gap-3">
+                            <div v-for="blog_sec in blog_main.data" class="">
+
+                                <!-- title -->
+                                <div v-if="blog_sec.title === 'heading'" class="">
+                                    <component :id="blog_sec.content" :is="blog_sec.titleTag"
+                                        :class="blog_sec.titleTag === 'h2' ? 'text-2xl text-[#2b2e33] font-bold font-heebo' : 'text-[#2b2e33] text-xl font-bold font-heebo'"
+                                        class="pt-10" v-text="blog_sec.content"></component>
+                                </div>
+                                <!-- title end -->
+
+                                <!-- description -->
+                                <div v-if="blog_sec.title === 'description'">
+                                    <div v-if="blog_sec.content.includes('--')" class="pl-8">
+                                        <component :is="'ul'">
+                                            <component :is="'li'" class="text-[#2b2e33] list-disc text-base ">
+                                                <p class="text-[#2b2e33] list-disc font-heebo text-base leading-7"
+                                                    v-html="blog_sec.content.replace('--','').trim()"> </p>
+                                            </component>
+                                        </component>
+                                    </div>
+                                    <div v-else>
+                                        <p class="text-[#2b2e33] font-heebo text-base leading-7"
+                                            v-html="blog_sec.content.replace('className', 'class')"></p>
+                                    </div>
+                                </div>
+                                <!-- description end -->
+
+                                <!-- button -->
+                                <div v-if="blog_sec.title === 'button'" class="my-5">
+
+                                    <a :href="blog_sec.link" target="_blank"
+                                        class="rounded py-4 px-5 w-fit bg-gradient-to-br from-[#18b04c] to-[#288df9] text-xs uppercase text-white font-bold font-heebo">{{blog_sec.content}}</a>
+
+                                </div>
+                                <!-- button end -->
+
+                                <!-- image -->
+                                <div v-if="blog_sec.title === 'image'" class="mt-4">
+                                    <div class="w-11/12 rounded-2xl overflow-hidden">
+                                        <img loading="lazy" :src="fileURL+blog_sec.content" class="w-full" alt="" />
+                                    </div>
+                                </div>
+                                <!-- image end -->
+
+                                <!-- video -->
+                                <div v-if="blog_sec.title === 'video'" class="mt-4  flex items-center">
+
+                                    <div class="relative flex">
+                                        <div class="w-11/12 rounded-2xl overflow-hidden">
+                                            <video @pause="videoPause" :src="fileURL+blog_sec.content"
+                                                ref="videoElement" id="videoElement" @loadedmetadata="seekToTime"
+                                                :class="videoPlayOnce ? 'block' : 'hidden'">
+                                            </video>
+
+                                            <video :src="fileURL+blog_sec.content" ref="thumbnailElement"
+                                                id="thumbnailElement" @loadedmetadata="seekToTime" class='hidden'>
+                                            </video>
+
+                                            <canvas id="canvasElement" style="display: none;"></canvas>
+                                            <img :src="thumbnailSrc" alt="Video Thumbnail" v-if="thumbnailSrc" />
+                                        </div>
+                                        <div v-if="videoPlay === false"
+                                            class="absolute flex justify-center items-center w-full h-full">
+                                            <div id="toggleControlsButton" @click="videoPlayBtn"
+                                                class="bg-gradient-to-br from-[#FB3A26] to-[#CB356B] cursor-pointer absolute z-[2] w-14 h-14 flex justify-center items-center rounded-full">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                    fill="#FFFFFF" class="w-7 h-7">
+                                                    <path fillRule="evenodd"
+                                                        d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z"
+                                                        clipRule="evenodd" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- video end -->
+
+                                <!-- table -->
+                                <div v-if="blog_sec.title === 'table'">
+                                    <div class="flow-root">
+                                        <div class="overflow-x-auto">
+                                            <div class="inline-block min-w-full py-2">
+                                                <div class="overflow-hidden shadow rounded-lg">
+                                                    <table class="min-w-full">
+                                                        <thead class="bg-[#2b2e33]">
+                                                            <tr class='divide-x'>
+                                                                <th v-for="(header, index) in tableHeader" :key="index"
+                                                                    scope="col"
+                                                                    :class="`w-[${100 / colm}%] p-4 text-center text-base font-bold text-white`">
+                                                                    {{ header }}</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody class="bg-white divide-y divide-gray-200">
+                                                            <tr v-for="(row, rowIndex) in tableBody" :key="rowIndex">
+                                                                <td v-for="(cell, cellIndex) in row" :key="cellIndex"
+                                                                    class="px-6 py-4 whitespace-nowrap text-sm text-center border-r border-l text-[#2b2e33]"
+                                                                    v-html="cell">
+                                                                    <!-- {{ cell }} -->
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- table -->
+
+                            </div>
+                        </div>
+                        <!-- section end -->
+
+                        <!-- CTA -->
+                        <div v-if="blog_main.type === 'cta'" class="flex rounded-2xl w-full mt-10 h-40">
+                            <div
+                                class="w-full h-full flex  justify-between items-center px-20 rounded-2xl bg-gradient-to-br from-[#15aa51] to-[#2489f3] ">
+                                <div class="flex flex-col gap-3">
+
+                                    <p class="text-[#f7f7f7] text-sm font-heebo"> Make your business call
+                                        now
+                                    </p>
+
+                                    <p class="text-white text-3xl leading-tight font-bold font-heebo">
+                                        Get started with our free trial
+                                    </p>
+
+                                </div>
+
+                                <a href="https://dashboard.telecmi.com/login?action=signup"
+                                    class="bg-white py-3 px-5 flex w-fit justify-center rounded text-center text-sm uppercase text-[#2b2e33] whitespace-nowrap outline-none font-bold font-heebo">Start
+                                    Free
+                                    trial </a>
+                            </div>
+                        </div>
+                        <!-- CTA end -->
+
+                        <!-- recommended reading -->
+                        <div v-if="blog_main.type === 'recommended_reading'" class="flex rounded-2xl mt-10 w-full h-40">
+                            <div
+                                class="w-1/6 h-auto flex justify-center items-end bg-gradient-to-br rounded-tl-xl rounded-bl-xl from-[#10d7e2] to-[#9358f7] ">
+                                <img loading="lazy" src="/public/website/img/blog_rec_read.png"
+                                    class="w-fit h-4/5 object-contain" alt="">
+                            </div>
+                            <div
+                                class="bg-[#2b2e33] w-5/6 h-full py-8 pl-8 rounded-tr-xl flex flex-col gap-3 rounded-br-xl">
+                                <h4 class="text-[#f0f1f2] text-base font-bold font-heebo">
+                                    Recommended reading
+                                </h4>
+                                <div v-for="blog_rcr in blog_main.data" class="">
+                                    <ul class="pl-8">
+                                        <li class="list-disc text-sm text-white">
+                                            <a :href="blog_rcr.link" target="_blank"
+                                                class="text-[#f0f1f2] font-heebo text-base outline-none hover:underline leading-7"
+                                                v-text="blog_rcr.description"></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- recommended reading -->
+
+                        <!-- testimonials -->
+                        <div v-if="blog_main.type === 'testimonials'"
+                            class="flex py-10 px-6 my-12 w-full border-[#c4c7cc] border-t border-b">
+                            <div class="w-1/6 h-auto flex justify-center ">
+                                <img loading="lazy" src="/public/website/img/testi.png" class="w-16 h-16 object-contain"
+                                    alt="">
+                            </div>
+                            <div v-for="blog_testi in blog_main.data"
+                                class=" w-5/6 h-full  rounded-tr-xl flex flex-col gap-5 rounded-br-xl">
+                                <p class="text-[#222222] text-[22px] font-dms">
+                                    {{ blog_testi.description}}
+                                </p>
+                                <div class="flex gap-1">
+                                    <div class="w-12 h-12 rounded-full overflow-hidden">
+                                        <img loading="lazy" :src="fileURL+blog_testi.img"
+                                            class="w-full h-full object-contain" alt="" />
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <p class="text-base text-[#222222] font-medium font-heebo">
+                                            {{blog_testi.name}}</p>
+                                        <p class="text-[#6b727f] text-sm font-heebo">{{blog_testi.role}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- testimonials end -->
+                    </div>
+
+                    <!-- Frequently read by people -->
+
+                    <div class="bg-white shadow-sm w-full h-full my-10 rounded-xl flex flex-col gap-5 p-10">
+                        <div>
+                            <h3 class="text-[#2b2e33] text-xl font-heebo font-bold">
+                                Frequently read by people
+                            </h3>
+                        </div>
+                        <div v-for="item in frpBlogs.slice(0,3)">
+                            <div class="flex gap-4 items-center pl-4">
+                                <img src="/public/website/img/f_read.png" class="w-4 h-4" alt="">
+                                <a :href="item.url_slug" class="text-[#2b2e33]">{{
+                                    item.blog_intro.blog_title}}</a>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full h-full flex justify-end gap-6">
+                        <div v-for="item in frpBlogs.slice(0,3)" class=" flex gap-4 justify-end">
+                            <div v-if="item.sub_category"
+                                class="border-[#c4c7cc] border cursor-default py-1 px-3 rounded-full">
+                                <p class="text-[#6b727f] font-heebo font-bold text-sm">{{item.sub_category}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Frequently read by people end -->
+
+                    <!-- FAQ -->
+                    <div v-for="blog_main in item.blog_data">
+                        <div v-if="blog_main.type === 'faq'" class="flex flex-col my-12  w-full">
+                            <div class="w-full h-auto flex ">
+                                <h6 class="text-[#2b2e33] text-2xl font-bold font-heebo">
+                                    Frequently asked questions (FAQ)
+                                </h6>
+                            </div>
+                            <dl class="mt-10 pb-6 border-t border-b space-y-6 divide-y divide-gray-900/10">
+                                <div v-for="(faq, index) in blog_main.data" :key="faq.id" class="pt-6">
+                                    <dt>
+                                        <button @click="toggle(index)" type="button"
+                                            class="flex w-full items-start justify-between text-left text-[#2b2e33]"
+                                            :aria-expanded="openFAQIndex === index ? 'true' : 'false'">
+                                            <span class="text-base font-semibold font-heebo leading-7">{{
+                                                faq.question
+                                                }}</span>
+                                            <span class="ml-6 flex h-7 items-center">
+                                                <svg v-show="openFAQIndex !== index" class="h-6 w-6 text-[#18B04C]"
+                                                    fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                                    stroke="currentColor" aria-hidden="true">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M12 6v12m6-6H6" />
+                                                </svg>
+                                                <svg v-show="openFAQIndex === index" class="h-6 w-6 text-[#18B04C]"
+                                                    fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                                    stroke="currentColor" aria-hidden="true">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    </dt>
+                                    <dd v-show="openFAQIndex === index" class="mt-2 pr-12 ">
+                                        <p class="text-base leading-7 font-heebo text-[#2b2e33]">{{ faq.answer }}
+                                        </p>
+                                    </dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                    <!-- FAQ end -->
+                </div>
+
+            </div>
+            <!-- blog main & toc -->
+
+
+            <!-- comment -->
+            <div class="w-full h-full">
+                <div v-if=" item.additional_data.allow_comment === 'true'"
+                    class="w-full h-full mt-10 mb-5 bg-white shadow-sm rounded-2xl">
+
+                    <div class="p-10 flex flex-col gap-10">
+                        <h4 class="text-[#2b2e33] text-2xl font-heebo font-bold">
+                            Leave a comment
+                        </h4>
+                        <div class=" flex flex-col gap-3">
+                            <p class="text-[#6b727f] font-medium">Comment*</p>
+                            <textarea @change="commentMsg"
+                                class="w-full border p-2 rounded-lg focus:border-[#e1e3e5] focus:ring-0 border-[#e1e3e5] bg-[#f6f6f6]"
+                                rows="3"></textarea>
+                        </div>
+                        <div class="flex gap-16">
+                            <div class=" flex flex-col gap-3 w-full">
+                                <p class="text-[#6b727f] font-medium">Name*</p>
+                                <input @change="commentName"
+                                    class="w-full border p-2 rounded-lg focus:border-[#e1e3e5] focus:ring-0 border-[#e1e3e5] bg-[#f6f6f6] h-12"></input>
+                            </div>
+                            <div class=" flex flex-col gap-3 w-full">
+                                <p class="text-[#6b727f] font-medium">Email*</p>
+                                <input @change="commentEmail"
+                                    class="w-full border p-2 rounded-lg focus:border-[#e1e3e5] focus:ring-0  border-[#e1e3e5] bg-[#f6f6f6] h-12"></input>
+                            </div>
+                        </div>
+
+                        <button @click="commentPost"
+                            class=" rounded py-4 px-7 w-fit bg-gradient-to-br from-[#18b04c] to-[#288df9] text-xs uppercase cursor-pointer text-white font-bold font-heebo">
+                            post
+                            comment</button>
+                    </div>
+
+                </div>
+            </div>
+            <!-- comment end -->
+
+            <!-- related posts -->
+            <div v-if="relatedBlogs.length > 0" class="">
+                <div class="flex flex-col w-full justify-center  gap-16 pt-20">
+                    <h5 class="text-[#2b2e33] lg:text-center font-heebo font-bold text-3xl">
+                        Related posts
+                    </h5>
+                    <div
+                        class="grid gap-10 xl:gap-10 w-full h-full lg:gap-32 xl:grid-cols-4 md:grid-cols-2 grid-cols-1">
+                        <div v-for="item in relatedBlogs.slice(0,4)" :key="item.id" class="w-full">
+                            <div @click="relatedBlogclick(item)"
+                                class="bg-white shadow-sm cursor-pointer flex flex-col justify-between gap-8 xl:gap-4 p-4 xl:p-3 rounded-xl w-full h-full">
+                                <div class="flex flex-col gap-3">
+                                    <div class="w-full flex justify-between rounded-xl overflow-hidden">
+                                        <img :src="fileURL+item.blog_intro.img" class="w-full h-full object-contain"
+                                            alt="">
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <img src="/public/website/img/clock.png" class="w-4 h-4" alt="">
+                                        <p class="text-[#a6aab2] text-sm font-heebo">{{item.time_to_read}}</p>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base text-[#2b2e33] font-heebo font-bold">
+                                            {{item.blog_intro.blog_title}}
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3">
+                                    <div class="w-10 h-10 rounded-full overflow-hidden">
+                                        <div v-if="item.author.photo === 'null' ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                strokeWidth={1.5} stroke="#d1d5db" class="w-full h-full">
+                                                <path strokeLinecap="round" strokeLinejoin="round"
+                                                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                            </svg>
+                                        </div>
+                                        <div v-else class="w-full h-full">
+                                            <img :src="fileURL+item.author.photo" class="w-full h-full object-cover"
+                                                alt="">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-[#222222] font-heebo font-medium text-base">
+                                            {{ item.author.firstname+' '+
+                                            item.author.lastname}}</p>
+                                        <p class="text-[#a6aab2] text-sm">{{item.pubDate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- related posts end -->
+
+        </div>
+    </div>
+</div>
